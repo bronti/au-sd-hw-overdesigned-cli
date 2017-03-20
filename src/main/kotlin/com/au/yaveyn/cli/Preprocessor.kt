@@ -25,7 +25,7 @@ class Preprocessor (val state: State) {
         var reuseCurrentChar = false
         var currentChar = ' '
         var currentInd = 0
-        while (currentInd < str.length) {
+        while (reuseCurrentChar || currentInd < str.length) {
             if (!reuseCurrentChar) {
                 currentChar = str[currentInd]
                 currentInd++
