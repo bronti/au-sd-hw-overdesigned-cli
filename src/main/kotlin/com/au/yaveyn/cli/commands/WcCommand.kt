@@ -14,12 +14,7 @@ class WcCommand(val filePath: String?) : Command() {
     override val name = "wc"
 
     override fun run(state: State, input: CommandInputStream?, output: CommandOutputStream) {
-        val inputString =
-                when {
-                    filePath != null -> FileInputStream(filePath).bufferedReader().readText()
-                    input != null -> input.toString()
-                    else -> throw InvalidArgumentException(arrayOf("wc: not enough parameters."))
-                }
+        val inputString = getInput(filePath, input)
 
         if (inputString.isEmpty()) {
             output.writeln("0 0 0")
