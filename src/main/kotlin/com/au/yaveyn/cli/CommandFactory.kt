@@ -13,11 +13,11 @@ class CommandFactory {
      */
     fun constructCommand(command: String, params: List<String>): Command {
 
-        fun checkParamsCount(params_needed: Int) {
-            if (params.size > params_needed) {
+        fun checkParamsCount(paramsNeeded: Int) {
+            if (params.size > paramsNeeded) {
                 //todo: ex
-                if (params_needed == 0) throw InvalidArgumentException(arrayOf("Invalid usage of $command command: zero parameters required."))
-                else throw InvalidArgumentException(arrayOf("Invalid usage of $command command: exactly $params_needed parameter required"))
+                if (paramsNeeded == 0) throw InvalidArgumentException(arrayOf("Invalid usage of $command command: zero parameters required."))
+                else throw InvalidArgumentException(arrayOf("Invalid usage of $command command: exactly $paramsNeeded parameter required"))
             }
         }
 

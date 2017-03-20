@@ -12,7 +12,7 @@ import java.io.FileNotFoundException
  */
 abstract class Command : ShellRunnable {
     /**
-     * Caommand name.
+     * Command name.
      */
     abstract val name: String
 
