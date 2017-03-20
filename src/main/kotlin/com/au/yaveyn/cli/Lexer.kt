@@ -1,5 +1,6 @@
 package com.au.yaveyn.cli
 
+import com.au.yaveyn.cli.exceptions.ShellUsageException
 import com.sun.javaws.exceptions.InvalidArgumentException
 import sun.plugin.dom.exception.InvalidStateException
 
@@ -41,12 +42,11 @@ class Lexer {
         val firstWordMatch = word.find(command) ?: throw InvalidStateException("Empty command.")
         val firstWord = firstWordMatch.groupValues[1]
         if (isAssignment(str)) {
-            //todo: ex
             val tail = command.removeRange(firstWordMatch.range).trim()
-            if (tail.isNotEmpty()) throw InvalidArgumentException(arrayOf("Invalid usage of assignment: no parameters are required."))
+            if (tail.isNotEmpty()) throw ShellUsageException("no parameters are required in assignment")
             val assignment = assign.split(firstWord)
-            if (assignment.size != 2) throw InvalidArgumentException(arrayOf("Invalid usage of assignment: there should be exactly one '=' in assignment."))
-            if (!assignment[0].all(::charFitsIntoVar)) throw InvalidArgumentException(arrayOf("Invalid usage of assignment: variable name should contain [a-zA-z0-9_] only."))
+            if (assignment.size != 2) throw ShellUsageException("there should be exactly one '=' in assignment")
+            if (!assignment[0].all(::charFitsIntoVar)) throw ShellUsageException("variable name should contain [a-zA-z0-9_] only")
             return listOf(Token(TokenType.WORD, assignment[0]), Token(TokenType.ASSIGNMENT, ""), Token(TokenType.WORD, assignment[1]))
         } else {
             return tokenizeCommand(command)
@@ -113,8 +113,7 @@ class Lexer {
             }
         }
         if (inputState == InputState.ONE_QUOTE || inputState == InputState.TWO_QUOTE) {
-            //todo: ex
-            throw InvalidArgumentException(arrayOf("Invalid command: all quotes should be closed."))
+            throw ShellUsageException("mismatched quotes")
         }
         if (inputState == InputState.BASE) {
             saveCurrentToken()

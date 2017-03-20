@@ -2,6 +2,7 @@ package com.au.yaveyn.cli
 
 import com.au.yaveyn.cli.commands.ShellRunnable
 import com.au.yaveyn.cli.commands.StateChange
+import com.au.yaveyn.cli.exceptions.ShellUsageException
 import com.sun.javaws.exceptions.InvalidArgumentException
 
 
@@ -30,7 +31,6 @@ class Parser {
             val param_values = lexems.drop(1).map { it.value }
             return factory.constructCommand(command, param_values)
         }
-        //todo: exception
-        throw InvalidArgumentException(arrayOf("Error: invalid command"))
+        throw ShellUsageException("invalid command")
     }
 }

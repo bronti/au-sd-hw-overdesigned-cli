@@ -1,6 +1,7 @@
 package com.au.yaveyn.cli
 
 import com.au.yaveyn.cli.commands.*
+import com.au.yaveyn.cli.exceptions.ShellUsageException
 import com.sun.javaws.exceptions.InvalidArgumentException
 
 /**
@@ -15,9 +16,8 @@ class CommandFactory {
 
         fun checkParamsCount(paramsNeeded: Int) {
             if (params.size > paramsNeeded) {
-                //todo: ex
-                if (paramsNeeded == 0) throw InvalidArgumentException(arrayOf("Invalid usage of $command command: zero parameters required."))
-                else throw InvalidArgumentException(arrayOf("Invalid usage of $command command: exactly $paramsNeeded parameter required"))
+                if (paramsNeeded == 0) throw ShellUsageException("zero parameters required in command '$command'")
+                else throw ShellUsageException("exactly $paramsNeeded parameters required in command ' $command'")
             }
         }
 

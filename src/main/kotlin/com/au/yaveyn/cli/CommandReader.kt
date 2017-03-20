@@ -1,5 +1,6 @@
 package com.au.yaveyn.cli
 
+import com.au.yaveyn.cli.exceptions.ShellUsageException
 import com.sun.javaws.exceptions.InvalidArgumentException
 import java.io.BufferedReader
 import java.io.InputStream
@@ -32,10 +33,9 @@ class CommandReader(val input: BufferedReader, val preprocessor: Preprocessor) :
                     .map { it.value }
 
             splittedLine
-                    .forEach { if (isDelimiterWithSpaces(it)) throw InvalidArgumentException(arrayOf("Syntax error near unexpected delimiter: " + it)) }
+                    .forEach { if (isDelimiterWithSpaces(it)) throw ShellUsageException("syntax error near unexpected delimiter: " + it) }
             commandBuffer = splittedLine
                     .map { Pair(command.find(it)!!.value.trim(), delimeterInstance(delimiter.find(it)!!.value)) }
-                    .toList()
         }
     }
 

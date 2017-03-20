@@ -1,6 +1,8 @@
 package com.au.yaveyn.cli.commands
 
 import com.au.yaveyn.cli.State
+import com.au.yaveyn.cli.exceptions.ShellRuntimeException
+import com.au.yaveyn.cli.exceptions.ShellUsageException
 import com.au.yaveyn.cli.streams.CommandInputStream
 import com.au.yaveyn.cli.streams.CommandOutputStream
 import com.sun.javaws.exceptions.InvalidArgumentException
@@ -16,9 +18,8 @@ class UnknownCommand(val command: String) : Command() {
     override fun run(state: State, input: CommandInputStream?, output: CommandOutputStream) {
         try {
             output.write(Runtime.getRuntime().exec(command).inputStream.bufferedReader().readText())
-        } catch (e: IOException) {
-            //todo: ex
-            throw InvalidArgumentException(arrayOf("Invalid command '$command'."))
+        } catch (e: Exception) {
+            throw ShellRuntimeException("error while executing '$command'", e)
         }
     }
 }
