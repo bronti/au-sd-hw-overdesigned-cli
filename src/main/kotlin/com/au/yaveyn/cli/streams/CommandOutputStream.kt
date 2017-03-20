@@ -8,6 +8,6 @@ interface CommandOutputStream {
     fun write(str: String): Unit
 
     fun writeln(str: String): Unit {
-        print(str + "\n")
+        write(str + "\n")
     }
 }
