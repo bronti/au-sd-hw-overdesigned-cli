@@ -22,7 +22,17 @@ class Preprocessor (val state: State) {
         val varName = StringBuilder()
         var inputState = InputState.BASE
 
-        for (currentChar in str) {
+        var reuseCurrentChar = false
+        var currentChar = ' '
+        var currentInd = 0
+        while (currentInd < str.length) {
+            if (!reuseCurrentChar) {
+                currentChar = str[currentInd]
+                currentInd++
+            }
+            else {
+                reuseCurrentChar = false
+            }
             inputState = when (Pair(inputState, currentChar)) {
                 Pair(InputState.BASE, '$') -> InputState.VAR
                 Pair(InputState.BASE, '\'') -> {
@@ -40,6 +50,7 @@ class Preprocessor (val state: State) {
                     } else {
                         result.append(state.getVar(varName.toString()))
                         varName.setLength(0)
+                        reuseCurrentChar = true
                         InputState.BASE
                     }
                 }
