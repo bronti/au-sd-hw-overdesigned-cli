@@ -1,5 +1,7 @@
 package com.au.yaveyn.cli
 
+import com.au.yaveyn.cli.exceptions.ShellRuntimeException
+import com.au.yaveyn.cli.exceptions.ShellUsageException
 import java.io.InputStream
 import java.io.OutputStream
 
@@ -19,10 +21,19 @@ class Shell(input: InputStream, output: OutputStream) {
      * Runs shell instance.
      */
     fun run() {
-        while (state.isRunning() && commandReader.hasNext()) {
-            val (command, delimeter) = commandReader.getCommand()!!
-            val runnable = parser.parse(command)
-            runner.process(runnable, delimeter)
+        while (state.isRunning()) {
+            try {
+                if (!commandReader.hasNext()) {
+                    break
+                }
+                val (command, delimeter) = commandReader.getCommand()!!
+                val runnable = parser.parse(command)
+                runner.process(runnable, delimeter)
+            } catch (e: ShellUsageException) {
+                runner.showError(e.message!!)
+            } catch (e: ShellRuntimeException) {
+                runner.showError(e.message!!)
+            }
         }
     }
 }

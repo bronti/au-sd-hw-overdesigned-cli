@@ -44,4 +44,12 @@ class CommandRunner(val state: State, output: OutputStream) {
             currentInputStream = innerOutput
         }
     }
+
+    /**
+     * Shows error message.
+     */
+    fun showError(msg: String) {
+        outputStream.writeln(msg)
+        outputStream.flush()
+    }
 }
