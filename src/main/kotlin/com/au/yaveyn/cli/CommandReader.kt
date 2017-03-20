@@ -9,7 +9,7 @@ private val delimiter = Regex(delimPattern)
 private val delimiterWithSpaces = Regex("\\s*" + delimPattern + "\\s*")
 private val command = Regex(commandPattern)
 
-private val endedByDelim = Regex(".*" + delimPattern)
+private val endedByDelim = Regex("$commandPattern*$delimPattern")
 private fun isDelimiterWithSpaces(delim: String) = delimiterWithSpaces.matchEntire(delim) != null
 
 /**
