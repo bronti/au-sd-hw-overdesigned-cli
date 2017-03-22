@@ -46,4 +46,24 @@ class WcCommand(val filePath: String?) : Command() {
 
         output.writeln("$lines $words $chars")
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other?.javaClass != javaClass) return false
+        if (!super.equals(other)) return false
+
+        other as WcCommand
+
+        if (filePath != other.filePath) return false
+        if (name != other.name) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = super.hashCode()
+        result = 31 * result + (filePath?.hashCode() ?: 0)
+        result = 31 * result + name.hashCode()
+        return result
+    }
 }

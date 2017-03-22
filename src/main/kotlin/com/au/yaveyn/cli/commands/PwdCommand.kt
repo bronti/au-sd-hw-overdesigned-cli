@@ -8,7 +8,7 @@ import java.nio.file.Paths
 /**
  * Pwd command implementation.
  */
-class PwdCommand() : Command() {
+class PwdCommand : Command() {
 
     override val name = "pwd"
 
