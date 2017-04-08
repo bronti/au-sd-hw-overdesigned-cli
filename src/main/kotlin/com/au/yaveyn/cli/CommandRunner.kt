@@ -2,6 +2,7 @@ package com.au.yaveyn.cli
 
 
 import com.au.yaveyn.cli.commands.ShellRunnable
+import com.au.yaveyn.cli.commands.UnknownCommand
 import com.au.yaveyn.cli.streams.CommandInputStream
 import com.au.yaveyn.cli.streams.CommandOutputStream
 import com.au.yaveyn.cli.streams.InnerStream
@@ -36,6 +37,9 @@ class CommandRunner(val state: State, output: OutputStream) {
     fun process(command: ShellRunnable, delim: Delimeter) {
         if (delim == Delimeter.EOL) {
             command.run(state, currentInputStream, outputStream)
+            if (command !is UnknownCommand) {
+                outputStream.writeln("")
+            }
             outputStream.flush()
             currentInputStream = null
         } else {

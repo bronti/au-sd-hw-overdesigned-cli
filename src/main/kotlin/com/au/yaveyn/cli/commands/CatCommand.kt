@@ -9,6 +9,13 @@ import com.au.yaveyn.cli.streams.CommandOutputStream
  */
 class CatCommand(val filePath: String?) : Command() {
 
+    companion object {
+        /**
+        * Maximum number of parameters.
+        */
+        val maxNumberOfParams: Int? = 1
+    }
+
     override val name = "cat"
 
     override fun run(state: State, input: CommandInputStream?, output: CommandOutputStream) {

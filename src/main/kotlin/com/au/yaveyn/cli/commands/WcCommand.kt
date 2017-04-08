@@ -11,6 +11,13 @@ import java.io.FileInputStream
  */
 class WcCommand(val filePath: String?) : Command() {
 
+    companion object {
+        /**
+         * Maximum number of parameters.
+         */
+        val maxNumberOfParams: Int? = 1
+    }
+
     override val name = "wc"
 
     override fun run(state: State, input: CommandInputStream?, output: CommandOutputStream) {
@@ -42,9 +49,9 @@ class WcCommand(val filePath: String?) : Command() {
         }
 
         if (!inputString.last().isWhitespace()) words++
-        lines++
+//        lines++
 
-        output.writeln("$lines $words $chars")
+        output.write("$lines $words $chars")
     }
 
     override fun equals(other: Any?): Boolean {

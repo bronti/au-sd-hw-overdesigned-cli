@@ -1,8 +1,8 @@
 package com.au.yaveyn.cli
 
 import com.au.yaveyn.cli.commands.*
+import com.au.yaveyn.cli.commands.CatCommand
 import com.au.yaveyn.cli.exceptions.ShellUsageException
-import com.sun.javaws.exceptions.InvalidArgumentException
 
 /**
  * Factory for creating commands.
@@ -14,35 +14,38 @@ class CommandFactory {
      */
     fun constructCommand(command: String, params: List<String>): Command {
 
-        fun checkParamsCount(paramsNeeded: Int) {
+        fun checkParamsCount(paramsNeeded: Int?) {
+            if (paramsNeeded == null) return
+
             if (params.size > paramsNeeded) {
                 if (paramsNeeded == 0) throw ShellUsageException("zero parameters required in command '$command'")
-                else throw ShellUsageException("exactly $paramsNeeded parameters required in command ' $command'")
+                else throw ShellUsageException("at most $paramsNeeded parameters required in command ' $command'")
             }
         }
 
         return when (command) {
             "cat" -> {
-                checkParamsCount(1)
+                checkParamsCount(CatCommand.maxNumberOfParams)
                 CatCommand(if (params.isEmpty()) null else params[0])
             }
             "echo" -> {
+                checkParamsCount(EchoCommand.maxNumberOfParams)
                 EchoCommand(params)
             }
             "exit" -> {
-                checkParamsCount(0)
+                checkParamsCount(ExitCommand.maxNumberOfParams)
                 ExitCommand()
             }
             "pwd" -> {
-                checkParamsCount(0)
+                checkParamsCount(PwdCommand.maxNumberOfParams)
                 PwdCommand()
             }
             "wc" -> {
-                checkParamsCount(1)
+                checkParamsCount(WcCommand.maxNumberOfParams)
                 WcCommand(if (params.isEmpty()) null else params[0])
             }
             else -> {
-                UnknownCommand(command + " " + params.joinToString(" "))
+                UnknownCommand(command + if (!params.isEmpty()) " " + params.joinToString(" ") else "")
             }
         }
 

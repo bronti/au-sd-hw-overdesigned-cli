@@ -9,10 +9,17 @@ import com.au.yaveyn.cli.streams.CommandOutputStream
  */
 class EchoCommand(val params: List<String>) : Command() {
 
+    companion object {
+        /**
+         * Maximum number of parameters.
+         */
+        val maxNumberOfParams: Int? = null
+    }
+
     override val name = "echo"
 
     override fun run(state: State, input: CommandInputStream?, output: CommandOutputStream) {
-        output.writeln(params.joinToString(" "))
+        output.write(params.joinToString(" "))
     }
 
     override fun equals(other: Any?): Boolean {

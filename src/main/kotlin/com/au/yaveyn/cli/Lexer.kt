@@ -38,6 +38,7 @@ class Lexer {
      * Tokenizes input string.
      */
     fun tokenize(str: String): List<Token> {
+        // todo:
         val command = str.trim()
         val firstWordMatch = word.find(command) ?: throw InvalidStateException("Empty command.")
         val firstWord = firstWordMatch.groupValues[1]

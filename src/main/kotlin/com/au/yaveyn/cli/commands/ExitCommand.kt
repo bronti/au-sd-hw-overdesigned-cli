@@ -9,6 +9,13 @@ import com.au.yaveyn.cli.streams.CommandOutputStream
  */
 class ExitCommand : Command() {
 
+    companion object {
+        /**
+         * Maximum number of parameters.
+         */
+        val maxNumberOfParams: Int? = 0
+    }
+
     override val name = "exit"
 
     override fun run(state: State, input: CommandInputStream?, output: CommandOutputStream) = state.requestExit()

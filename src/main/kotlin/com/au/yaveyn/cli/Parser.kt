@@ -4,6 +4,7 @@ import com.au.yaveyn.cli.commands.ShellRunnable
 import com.au.yaveyn.cli.commands.StateChange
 import com.au.yaveyn.cli.exceptions.ShellUsageException
 import com.sun.javaws.exceptions.InvalidArgumentException
+import sun.plugin.dom.exception.InvalidStateException
 
 
 /**
@@ -28,9 +29,9 @@ class Parser {
         }
         if (lexems.isNotEmpty() && lexems.all { it.type == Lexer.TokenType.WORD }) {
             val command = lexems[0].value
-            val param_values = lexems.drop(1).map { it.value }
-            return factory.constructCommand(command, param_values)
+            val paramValues = lexems.drop(1).map { it.value }
+            return factory.constructCommand(command, paramValues)
         }
-        throw ShellUsageException("invalid command")
+        throw InvalidStateException("unreachable")
     }
 }

@@ -10,10 +10,17 @@ import java.nio.file.Paths
  */
 class PwdCommand : Command() {
 
+    companion object {
+        /**
+         * Maximum number of parameters.
+         */
+        val maxNumberOfParams: Int? = 0
+    }
+
     override val name = "pwd"
 
     override fun run(state: State, input: CommandInputStream?, output: CommandOutputStream) {
-        output.writeln(Paths.get("").toAbsolutePath().toString())
+        output.write(Paths.get("").toAbsolutePath().toString())
     }
 
 }
