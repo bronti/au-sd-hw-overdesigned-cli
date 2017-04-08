@@ -9,7 +9,7 @@ class PreprocessorTest {
     fun testId() {
         val st = State()
         val p = Preprocessor(st)
-        assertEquals(p.preprocess("some test n&* ioahs **'''''''"), "some test n&* ioahs **'''''''")
+        assertEquals("some test n&* mom's spagetti **'''''''", p.preprocess("some test n&* mom's spagetti **'''''''"))
     }
 
     @Test
@@ -18,8 +18,8 @@ class PreprocessorTest {
         val p = Preprocessor(st)
         st.setVar("a", "var_a")
         st.setVar("b", "var_   b@@!!")
-        assertEquals(p.preprocess("\$a"), "var_a")
-        assertEquals(p.preprocess("\$b"), "var_   b@@!!")
+        assertEquals("var_a", p.preprocess("\$a"))
+        assertEquals("var_   b@@!!", p.preprocess("\$b"))
     }
 
     @Test
@@ -28,7 +28,7 @@ class PreprocessorTest {
         val p = Preprocessor(st)
         st.setVar("a", "var_a")
         st.setVar("b", "var_   b@@!!")
-        assertEquals(p.preprocess("\$b\$ba \$a'"), "var_   b@@!! var_a'")
+        assertEquals("var_   b@@!! var_a'", p.preprocess("\$b\$ba \$a'"))
     }
 
 }

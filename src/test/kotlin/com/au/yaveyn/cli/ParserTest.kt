@@ -11,25 +11,25 @@ class ParserTest {
     @Test
     fun testStateChanger() {
         val p = Parser()
-        val c : ShellRunnable = StateChange("aaa", "715!")
-        Assert.assertEquals(p.parse("aaa=715!"), c)
+        val result : ShellRunnable = StateChange("aaa", "715!")
+        Assert.assertEquals(result, p.parse("aaa=715!"))
     }
 
     @Test
     fun testZeroParams() {
         val p = Parser()
-        Assert.assertEquals(p.parse("exit"), ExitCommand())
+        Assert.assertEquals(ExitCommand(), p.parse("exit"))
     }
 
     @Test
     fun testOneParam() {
         val p = Parser()
-        Assert.assertEquals(p.parse("wc www"), WcCommand("www"))
+        Assert.assertEquals(WcCommand("www"), p.parse("wc www"))
     }
 
     @Test
     fun testUnknownCommand() {
         val p = Parser()
-        Assert.assertEquals(p.parse("wcl www"), UnknownCommand("wcl www"))
+        Assert.assertEquals(UnknownCommand("wcl www"), p.parse("wcl www"))
     }
 }
