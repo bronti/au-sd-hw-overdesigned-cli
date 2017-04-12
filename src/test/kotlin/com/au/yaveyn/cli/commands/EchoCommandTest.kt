@@ -17,13 +17,13 @@ import java.io.FileInputStream
  * Created by bronti on 08.04.17.
  */
 
-class CatCommandTest {
+class EchoCommandTest {
 
     @Test
     internal fun testSimple() {
-        val filePath = "testData/test.txt"
-        val command = CatCommand(filePath)
-        val text = FileInputStream(filePath).bufferedReader().readText()
+        val params = listOf("1", "!...", "\n", "spam")
+        val command = EchoCommand(params)
+        val text = params.joinToString(" ")
 
         val out = ByteArrayOutputStream()
         val runner = CommandRunner(State(), out)
@@ -33,18 +33,8 @@ class CatCommandTest {
     }
 
     @Test
-    internal fun testNoSuchFile() {
-        val command = CatCommand("whoosh.hrhrhr")
-
-        val out = ByteArrayOutputStream()
-        val runner = CommandRunner(State(), out)
-
-        assertThat({ runner.process(command, Delimeter.EOL) }, throws<ShellRuntimeException>())
-    }
-
-    @Test
     internal fun testPipe() {
-        val command = CatCommand(null)
+        val command = EchoCommand(listOf("2"))
         val echoCommand = EchoCommand(listOf("1"))
 
         val out = ByteArrayOutputStream()
@@ -54,27 +44,17 @@ class CatCommandTest {
         runner.process(echoCommand, Delimeter.PIPE)
         runner.process(command, Delimeter.EOL)
 
-        assertThat(out.toString(), equalTo("1\n"))
+        assertThat(out.toString(), equalTo("2\n"))
     }
 
     @Test
     internal fun testEmpty() {
-        val command = CatCommand("testData/testEmpty.txt")
+        val command = EchoCommand(emptyList())
 
         val out = ByteArrayOutputStream()
         val runner = CommandRunner(State(), out)
         runner.process(command, Delimeter.EOL)
 
         assertThat(out.toString(), equalTo("\n"))
-    }
-
-    @Test
-    internal fun testNotEnoughParams() {
-        val command = CatCommand(null)
-
-        val out = ByteArrayOutputStream()
-        val runner = CommandRunner(State(), out)
-
-        assertThat({ runner.process(command, Delimeter.EOL) }, throws<ShellUsageException>())
     }
 }

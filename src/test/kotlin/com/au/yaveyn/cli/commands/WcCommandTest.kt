@@ -67,6 +67,16 @@ class WcCommandTest {
         assertThat({ runner.process(command, Delimeter.EOL) }, throws<ShellRuntimeException>())
     }
 
+    @Test
+    internal fun testNotEnoughParams() {
+        val command = WcCommand(null)
+
+        val out = ByteArrayOutputStream()
+        val runner = CommandRunner(State(), out)
+
+        assertThat({ runner.process(command, Delimeter.EOL) }, throws<ShellUsageException>())
+    }
+
     fun checkEqualWcOutput(expected: Command, actual: Command) {
         val out = ByteArrayOutputStream()
         val testOut = ByteArrayOutputStream()

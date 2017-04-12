@@ -28,6 +28,12 @@ class ParserTest {
     }
 
     @Test
+    fun testMoreParams() {
+        val p = Parser()
+        Assert.assertEquals(EchoCommand(listOf("www", "!", "...")), p.parse("echo www ! ..."))
+    }
+
+    @Test
     fun testUnknownCommand() {
         val p = Parser()
         Assert.assertEquals(UnknownCommand("wcl www"), p.parse("wcl www"))
