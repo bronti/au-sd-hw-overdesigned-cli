@@ -57,7 +57,6 @@ class WcCommand(val filePath: String?) : Command() {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other?.javaClass != javaClass) return false
-        if (!super.equals(other)) return false
 
         other as WcCommand
 
