@@ -44,6 +44,10 @@ class CommandFactory {
                 checkParamsCount(WcCommand.maxNumberOfParams)
                 WcCommand(if (params.isEmpty()) null else params[0])
             }
+            "cd" -> {
+                checkParamsCount(CdCommand.maxNumberOfParams)
+                CdCommand(if (params.isEmpty()) null else params[0])
+            }
             else -> {
                 UnknownCommand(command + if (!params.isEmpty()) " " + params.joinToString(" ") else "")
             }

@@ -1,5 +1,6 @@
 package com.au.yaveyn.cli
 
+import java.nio.file.Paths
 import java.util.*
 
 /**
@@ -8,6 +9,13 @@ import java.util.*
 class State {
     private val variables: HashMap<String, String> = HashMap()
     private var exitRequested = false
+    private var currentDirectory = Paths.get("").toAbsolutePath().toString()
+
+    fun getPath() = currentDirectory;
+
+    fun setPath(path : String) {
+        currentDirectory = path
+    }
 
     /**
      * Get a value of a variable.
