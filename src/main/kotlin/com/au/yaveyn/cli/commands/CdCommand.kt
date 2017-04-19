@@ -7,6 +7,12 @@ import com.au.yaveyn.cli.streams.CommandOutputStream
 import java.io.File
 import java.nio.file.Paths
 
+/**
+ *
+ * Change directory command implementation
+ *
+ */
+
 class CdCommand(val newPath: String?) : Command() {
 
     companion object {
@@ -20,9 +26,9 @@ class CdCommand(val newPath: String?) : Command() {
 
     override fun run(state: State, input: CommandInputStream?, output: CommandOutputStream) {
         if (newPath != null) {
-            val resPath = getNewDir(state.getPath(), newPath)
+            val resPath = getNewDir(state.getCurrentDirectory(), newPath)
             if (checkPathExistence(resPath)) {
-                state.setPath(resPath)
+                state.setCurrentDirectory(resPath)
             } else {
                 throw ShellUsageException("path $resPath does not exist")
             }

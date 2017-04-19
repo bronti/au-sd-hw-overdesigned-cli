@@ -20,7 +20,7 @@ class PwdCommand : Command() {
     override val name = "pwd"
 
     override fun run(state: State, input: CommandInputStream?, output: CommandOutputStream) {
-        output.write(state.getPath())
+        output.write(state.getCurrentDirectory())
     }
 
     override fun equals(other: Any?): Boolean {

@@ -11,9 +11,15 @@ class State {
     private var exitRequested = false
     private var currentDirectory = Paths.get("").toAbsolutePath().toString()
 
-    fun getPath() = currentDirectory;
+    /**
+     * Get current absolute path
+     */
+    fun getCurrentDirectory() = currentDirectory;
 
-    fun setPath(path : String) {
+    /**
+    * Set current absolute path
+    */
+    fun setCurrentDirectory(path : String) {
         currentDirectory = path
     }
 

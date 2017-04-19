@@ -4,11 +4,13 @@ import com.au.yaveyn.cli.State
 import com.au.yaveyn.cli.streams.CommandInputStream
 import com.au.yaveyn.cli.streams.CommandOutputStream
 import java.nio.file.Files
-import java.nio.file.Path
 import java.nio.file.Paths
-import java.util.stream.Stream
 
-
+/*
+*
+* List files in current directory command implementation
+*
+* */
 class LsCommand: Command() {
 
     companion object {
@@ -21,13 +23,14 @@ class LsCommand: Command() {
     override val name: String = "ls"
 
     override fun run(state: State, input: CommandInputStream?, output: CommandOutputStream) {
-        val paths = Files.walk(Paths.get(state.getPath()), 1)
+        val paths = Files.walk(Paths.get(state.getCurrentDirectory()), 1)
         val strings = mutableListOf<String>()
-        paths.forEach({path -> filteredPrint(path.toAbsolutePath().toString(), state.getPath(), strings)})
+        paths.forEach({path -> filteredPrint(path.toAbsolutePath().toString(), state.getCurrentDirectory(), strings)})
+
         strings.sort()
         val last = strings.removeAt(strings.size - 1)
         strings.forEach{string -> output.writeln(string)}
-        output.write(last)
+        output.write(last) //no newline at the end
     }
 
     private fun filteredPrint(path: String, absolute: String, strings: MutableList<String>) {
