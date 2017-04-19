@@ -48,6 +48,10 @@ class CommandFactory {
                 checkParamsCount(CdCommand.maxNumberOfParams)
                 CdCommand(if (params.isEmpty()) null else params[0])
             }
+            "ls" -> {
+                checkParamsCount(LsCommand.maxNumberOfParams)
+                LsCommand()
+            }
             else -> {
                 UnknownCommand(command + if (!params.isEmpty()) " " + params.joinToString(" ") else "")
             }
