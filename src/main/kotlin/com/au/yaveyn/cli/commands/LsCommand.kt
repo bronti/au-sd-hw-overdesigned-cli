@@ -22,17 +22,22 @@ class LsCommand: Command() {
 
     override fun run(state: State, input: CommandInputStream?, output: CommandOutputStream) {
         val paths = Files.walk(Paths.get(state.getPath()), 1)
-        paths.forEach({path -> filteredPrint(path.toAbsolutePath().toString(), state.getPath(), output)})
+        val strings = mutableListOf<String>()
+        paths.forEach({path -> filteredPrint(path.toAbsolutePath().toString(), state.getPath(), strings)})
+        strings.sort()
+        val last = strings.removeAt(strings.size - 1)
+        strings.forEach{string -> output.writeln(string)}
+        output.write(last)
     }
 
-    private fun filteredPrint(path: String, absolute: String, output: CommandOutputStream) {
+    private fun filteredPrint(path: String, absolute: String, strings: MutableList<String>) {
         val pattern = if(absolute == "/") "(?<=$absolute).*" else "(?<=$absolute/).*"
         val regex = Regex(pattern)
         val res = regex.find(path)
         if (res != null) {
             val out = res.groups[0]?.value
-            if (out != null) {
-                output.writeln(out)
+            if (out != null && !out.startsWith(".") && out != "") {
+                strings.add(out)
             }
         }
     }
