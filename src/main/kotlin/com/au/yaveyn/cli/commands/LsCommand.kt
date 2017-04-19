@@ -1,8 +1,11 @@
 package com.au.yaveyn.cli.commands
 
+import com.au.yaveyn.cli.CommandRunner
+import com.au.yaveyn.cli.Delimeter
 import com.au.yaveyn.cli.State
 import com.au.yaveyn.cli.streams.CommandInputStream
 import com.au.yaveyn.cli.streams.CommandOutputStream
+import java.io.ByteArrayOutputStream
 import java.nio.file.Files
 import java.nio.file.Paths
 
@@ -11,7 +14,7 @@ import java.nio.file.Paths
 * List files in current directory command implementation
 *
 * */
-class LsCommand: Command() {
+class LsCommand(val path: String?): Command() {
 
     companion object {
         /**
@@ -23,6 +26,17 @@ class LsCommand: Command() {
     override val name: String = "ls"
 
     override fun run(state: State, input: CommandInputStream?, output: CommandOutputStream) {
+        if (path == null) {
+            doLs(state, output)
+        } else {
+            val prevPath = state.getCurrentDirectory()
+            CommandRunner(state, ByteArrayOutputStream()).process(CdCommand(path), Delimeter.EOL)
+            doLs(state, output)
+            state.setCurrentDirectory(prevPath)
+        }
+    }
+
+    private fun doLs(state: State, output: CommandOutputStream) {
         val paths = Files.walk(Paths.get(state.getCurrentDirectory()), 1)
         val strings = mutableListOf<String>()
         paths.forEach({path -> filteredPrint(path.toAbsolutePath().toString(), state.getCurrentDirectory(), strings)})

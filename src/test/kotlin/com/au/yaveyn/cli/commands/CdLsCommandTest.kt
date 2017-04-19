@@ -10,7 +10,7 @@ import java.io.ByteArrayOutputStream
 class CdLsCommandTest {
     @Test
     internal fun testSimpleLs() {
-        val command = LsCommand()
+        val command = LsCommand(null)
         val testCommand = UnknownCommand("ls")
         val out = runCommand(command)
         val testOut = runCommand(testCommand)
@@ -22,12 +22,21 @@ class CdLsCommandTest {
         val state = State()
         runCommand(CdCommand("/"), state)
 
-        val command = LsCommand()
+        val command = LsCommand(null)
         val testCommand = UnknownCommand("ls /")
         val out = runCommand(command, state)
         val testOut = runCommand(testCommand)
         Assert.assertEquals(out.toString(), testOut.toString())
 
+    }
+
+    @Test
+    internal fun testLsWithArg() {
+        val out = runCommand(LsCommand("/"))
+        val testOut = runCommand(UnknownCommand("ls /"))
+        Assert.assertEquals(out.toString(), testOut.toString())
+
+        testSimpleLs()
     }
 
     private fun runCommand(command : Command, state: State = State()): ByteArrayOutputStream {
