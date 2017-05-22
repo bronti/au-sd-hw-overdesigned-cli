@@ -1,5 +1,6 @@
 package com.au.yaveyn.cli
 
+import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.*
 
@@ -9,7 +10,10 @@ import java.util.*
 class State {
     private val variables: HashMap<String, String> = HashMap()
     private var exitRequested = false
-    private var currentDirectory = Paths.get("").toAbsolutePath().toString()
+    private var currentDirectory = Paths.get("").toAbsolutePath()
+
+
+    private val systemRoot = findRoot()
 
     /**
      * Get current absolute path
@@ -17,9 +21,14 @@ class State {
     fun getCurrentDirectory() = currentDirectory;
 
     /**
+     * Get system root. "/" for Linux and "C:\" for Windows
+     */
+    fun getSystemRoot() = systemRoot
+
+    /**
     * Set current absolute path
     */
-    fun setCurrentDirectory(path : String) {
+    fun setCurrentDirectory(path : Path) {
         currentDirectory = path
     }
 
@@ -38,6 +47,14 @@ class State {
      */
     fun requestExit() {
         exitRequested = true
+    }
+
+    fun findRoot() : Path {
+        var root = Paths.get("")
+        while (root.parent != null) {
+            root = root.parent
+        }
+        return root;
     }
 
     /**

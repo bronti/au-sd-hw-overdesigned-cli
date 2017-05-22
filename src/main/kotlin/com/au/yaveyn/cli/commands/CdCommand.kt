@@ -5,6 +5,7 @@ import com.au.yaveyn.cli.exceptions.ShellUsageException
 import com.au.yaveyn.cli.streams.CommandInputStream
 import com.au.yaveyn.cli.streams.CommandOutputStream
 import java.io.File
+import java.nio.file.Path
 import java.nio.file.Paths
 
 /**
@@ -26,7 +27,7 @@ class CdCommand(val newPath: String?) : Command() {
 
     override fun run(state: State, input: CommandInputStream?, output: CommandOutputStream) {
         if (newPath != null) {
-            val resPath = getNewDir(state.getCurrentDirectory(), newPath)
+            val resPath = getNewDir(state, newPath)
             if (checkPathExistence(resPath)) {
                 state.setCurrentDirectory(resPath)
             } else {
@@ -36,47 +37,37 @@ class CdCommand(val newPath: String?) : Command() {
         }
     }
 
-    private fun getNewDir(oldPath: String, newPath: String) : String {
+    private fun getNewDir(state: State, newPath: String) : Path {
 
         if (isGoUpCommand(newPath)) {
-            return cutLastFolder(oldPath)
+            if (state.getCurrentDirectory() == state.getSystemRoot()) {
+                return state.getCurrentDirectory()
+            }
+            return state.getCurrentDirectory().parent
         }
 
         if (isAbsoluteCommand(newPath)) {
-            return newPath
+            return Paths.get(newPath)
         }
 
-        return concatenatePaths(oldPath, newPath)
+        return concatenatePaths(state, newPath)
     }
 
-    private fun concatenatePaths(path1 : String, path2 : String): String {
-        if (path1 == "/") {
-            return path1 + path2
-        } else {
-            return "$path1/$path2"
-        }
+    private fun concatenatePaths(state: State, path2 : String): Path {
+        return state.getCurrentDirectory().resolve(path2)
     }
 
     private fun isGoUpCommand(newPath: String): Boolean {
         return newPath == ".."
     }
 
-    private fun cutLastFolder(oldPath: String): String {
-        if (oldPath == "/") {
-            return oldPath
-        }
-        val pattern = "/[^/]*?\$"
-        val regex = Regex(pattern)
-        val res = regex.split(oldPath)
-        return if (res[0] == "") "/" else res[0]
-    }
-
     private fun isAbsoluteCommand(newPath: String): Boolean {
-        return newPath.startsWith("/")
+        val path = Paths.get(newPath)
+        return path.isAbsolute
     }
 
-    private fun checkPathExistence(resPath: String) : Boolean {
-        val file = File(resPath);
+    private fun checkPathExistence(resPath: Path) : Boolean {
+        val file = File(resPath.toString());
         return file.exists() && file.isDirectory
     }
 }

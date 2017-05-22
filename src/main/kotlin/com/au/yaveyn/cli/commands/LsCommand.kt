@@ -8,7 +8,6 @@ import com.au.yaveyn.cli.streams.CommandOutputStream
 import java.io.ByteArrayOutputStream
 import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.Paths
 import java.util.stream.Collectors
 
 /*
@@ -39,9 +38,10 @@ class LsCommand(val path: String?): Command() {
     }
 
     private fun doLs(state: State, output: CommandOutputStream) {
-        val paths = Files.walk(Paths.get(state.getCurrentDirectory()), 1)
+        val paths = Files.walk(state.getCurrentDirectory(), 1)
         val strings = paths
-                .map { path -> toStringPath(path, state.getCurrentDirectory()) }
+                .filter {path -> path != state.getCurrentDirectory()}
+                .map { path -> toStringPath(path) }
                 .filter { path -> !path.startsWith(".") && path != "" }
                 .sorted()
                 .collect(Collectors.toList())
@@ -50,7 +50,7 @@ class LsCommand(val path: String?): Command() {
         output.write(merged)
     }
 
-    private fun toStringPath(path: Path, absolute : String) : String {
-        return path.toAbsolutePath().toString().removePrefix(absolute).removePrefix("/")
+    private fun toStringPath(path: Path) : String {
+        return path.fileName.toString()
     }
 }
