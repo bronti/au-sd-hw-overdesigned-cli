@@ -38,7 +38,6 @@ class CdCommand(val newPath: String?) : Command() {
     }
 
     private fun getNewDir(state: State, newPath: String) : Path {
-
         if (isGoUpCommand(newPath)) {
             if (state.getCurrentDirectory() == state.getSystemRoot()) {
                 return state.getCurrentDirectory()
