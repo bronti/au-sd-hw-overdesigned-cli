@@ -7,7 +7,9 @@ import com.au.yaveyn.cli.streams.CommandInputStream
 import com.au.yaveyn.cli.streams.CommandOutputStream
 import java.io.ByteArrayOutputStream
 import java.nio.file.Files
+import java.nio.file.Path
 import java.nio.file.Paths
+import java.util.stream.Collectors
 
 /*
 *
@@ -38,24 +40,17 @@ class LsCommand(val path: String?): Command() {
 
     private fun doLs(state: State, output: CommandOutputStream) {
         val paths = Files.walk(Paths.get(state.getCurrentDirectory()), 1)
-        val strings = mutableListOf<String>()
-        paths.forEach({path -> filteredPrint(path.toAbsolutePath().toString(), state.getCurrentDirectory(), strings)})
+        val strings = paths
+                .map { path -> toStringPath(path, state.getCurrentDirectory()) }
+                .filter { path -> !path.startsWith(".") && path != "" }
+                .sorted()
+                .collect(Collectors.toList())
 
-        strings.sort()
-        val last = strings.removeAt(strings.size - 1)
-        strings.forEach{string -> output.writeln(string)}
-        output.write(last) //no newline at the end
+        val merged = strings.joinToString(separator = "\n")
+        output.write(merged)
     }
 
-    private fun filteredPrint(path: String, absolute: String, strings: MutableList<String>) {
-        val pattern = if(absolute == "/") "(?<=$absolute).*" else "(?<=$absolute/).*"
-        val regex = Regex(pattern)
-        val res = regex.find(path)
-        if (res != null) {
-            val out = res.groups[0]?.value
-            if (out != null && !out.startsWith(".") && out != "") {
-                strings.add(out)
-            }
-        }
+    private fun toStringPath(path: Path, absolute : String) : String {
+        return path.toAbsolutePath().toString().removePrefix(absolute).removePrefix("/")
     }
 }
