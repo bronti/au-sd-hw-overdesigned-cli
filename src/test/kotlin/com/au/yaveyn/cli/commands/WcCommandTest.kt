@@ -18,14 +18,6 @@ import java.io.ByteArrayOutputStream
 class WcCommandTest {
 
     @Test
-    internal fun testSimple() {
-        val command = WcCommand("testData/test.txt")
-        val testCommand = UnknownCommand("wc testData/test.txt")
-
-        checkEqualWcOutput(testCommand, command)
-    }
-
-    @Test
     internal fun testEmptyLastLine() {
         val command = WcCommand("testData/testEmptyLineInTheEnd.txt")
         val testCommand = UnknownCommand("wc testData/testEmptyLineInTheEnd.txt")
@@ -45,7 +37,7 @@ class WcCommandTest {
         runner.process(echoCommand, Delimeter.PIPE)
         runner.process(command, Delimeter.EOL)
 
-        checkEqualWcOutput("0 1 1", out.toString())
+        checkEqualWcOutput("1 1 1", out.toString())
     }
 
     @Test

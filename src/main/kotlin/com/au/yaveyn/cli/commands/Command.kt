@@ -7,6 +7,7 @@ import com.au.yaveyn.cli.streams.CommandInputStream
 import com.au.yaveyn.cli.streams.CommandOutputStream
 import java.io.FileInputStream
 import java.io.FileNotFoundException
+import java.io.Reader
 
 /**
  * Base class for all commands.
@@ -23,11 +24,11 @@ abstract class Command : ShellRunnable {
      */
     abstract override fun run(state: State, input: CommandInputStream?, output: CommandOutputStream)
 
-    protected fun getInput(filePath: String?, input: CommandInputStream?): String {
+    protected fun getInputReader(filePath: String?, input: CommandInputStream?): Reader {
         try {
             when {
-                filePath != null -> return FileInputStream(filePath).bufferedReader().readText()
-                input != null -> return input.toString()
+                filePath != null -> return FileInputStream(filePath).bufferedReader()
+                input != null -> return input.toReader()
                 else -> throw ShellUsageException("$name: not enough parameters.")
             }
         } catch (ex: FileNotFoundException) {

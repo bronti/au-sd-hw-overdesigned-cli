@@ -19,7 +19,7 @@ class CatCommand(val filePath: String?) : Command() {
     override val name = "cat"
 
     override fun run(state: State, input: CommandInputStream?, output: CommandOutputStream) {
-        output.write(getInput(filePath, input))
+        output.write(getInputReader(filePath, input).readText())
     }
 
     override fun equals(other: Any?): Boolean {
