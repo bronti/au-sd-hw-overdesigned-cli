@@ -3,8 +3,6 @@ package com.au.yaveyn.cli.commands
 import com.au.yaveyn.cli.State
 import com.au.yaveyn.cli.streams.CommandInputStream
 import com.au.yaveyn.cli.streams.CommandOutputStream
-import com.sun.javaws.exceptions.InvalidArgumentException
-import java.io.FileInputStream
 
 /**
  * Wc command implementation.
@@ -21,7 +19,7 @@ class WcCommand(val filePath: String?) : Command() {
     override val name = "wc"
 
     override fun run(state: State, input: CommandInputStream?, output: CommandOutputStream) {
-        val inputString = getInput(filePath, input)
+        val inputString = getInputReader(filePath, input).readText()
 
         if (inputString.isEmpty()) {
             output.writeln("0 0 0")

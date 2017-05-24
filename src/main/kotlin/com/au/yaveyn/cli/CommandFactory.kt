@@ -44,6 +44,9 @@ class CommandFactory {
                 checkParamsCount(WcCommand.maxNumberOfParams)
                 WcCommand(if (params.isEmpty()) null else params[0])
             }
+            "grep" -> {
+                GrepCommand(params)
+            }
             else -> {
                 UnknownCommand(command + if (!params.isEmpty()) " " + params.joinToString(" ") else "")
             }

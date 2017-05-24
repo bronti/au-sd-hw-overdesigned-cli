@@ -5,30 +5,17 @@ import com.au.yaveyn.cli.commands.ShellRunnable
 import com.au.yaveyn.cli.commands.UnknownCommand
 import com.au.yaveyn.cli.streams.CommandInputStream
 import com.au.yaveyn.cli.streams.CommandOutputStream
+import com.au.yaveyn.cli.streams.CommandOutputStreamImpl
 import com.au.yaveyn.cli.streams.InnerStream
 import java.io.BufferedWriter
 import java.io.OutputStream
-import java.io.OutputStreamWriter
 
 /**
  * Chooses appropriate input and output streams depending on pipes and runs a command.
  */
 class CommandRunner(val state: State, output: OutputStream) {
 
-    private class OutputStreamWrapper(stream: OutputStream) : CommandOutputStream {
-
-        var writer = BufferedWriter(OutputStreamWriter(stream))
-
-        override fun write(str: String) {
-            writer.write(str)
-        }
-
-        fun flush() {
-            writer.flush()
-        }
-    }
-
-    private val outputStream = OutputStreamWrapper(output)
+    private val outputStream = CommandOutputStreamImpl(output)
     private var currentInputStream: CommandInputStream? = null
 
     /**
