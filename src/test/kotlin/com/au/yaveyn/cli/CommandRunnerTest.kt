@@ -38,7 +38,7 @@ class CommandRunnerTest {
         runner.process(command1, Delimeter.PIPE)
         runner.process(command2, Delimeter.EOL)
 
-        Assert.assertEquals("0 1 1\n", out.toString())
+        Assert.assertEquals("1 1 1\n", out.toString())
     }
 
     @Test

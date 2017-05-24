@@ -47,7 +47,7 @@ class WcCommand(val filePath: String?) : Command() {
         }
 
         if (!inputString.last().isWhitespace()) words++
-//        lines++
+        if (inputString.last() != '\n') lines++
 
         output.write("$lines $words $chars")
     }
